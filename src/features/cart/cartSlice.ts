@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { idText } from "typescript";
 import { RootState } from "../../app/store";
 
-export interface ProductModel {
+export interface CartItemModel {
   id: string;
   name: string;
   price: number;
+  quantity: number;
 }
 
 export interface CartState {
-  items: ProductModel[];
+  items: CartItemModel[];
 }
 
 const initialState: CartState = {
@@ -19,18 +21,50 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<ProductModel>) => {
-      const product = action.payload;
+    addToCart: (state, action: PayloadAction<CartItemModel>) => {
+      const item = state.items.find((i) => i.id === action.payload.id);
 
-      state.items.push(product);
+      if (item) {
+        item.quantity++;
+      } else {
+        state.items.push(action.payload);
+      }
+    },
+    removeFromCart: (state, action: PayloadAction<{ id: string }>) => {
+      // Sposob 1
+      // const index = state.items.findIndex((i) => i.id === action.payload.id);
 
-      // items [ 1, 2, 3, ] => 0, 1, 2 => state.items.length => 3
-      // state.items[state.items.length] = product;
+      // if (index > -1) {
+      //   state.items.splice(index, 1);
+      // }
+
+      // [ {id: 1}, {id: 2}, id: {3}] // 5
+      // [ {id: 1}, {id: 2}, {id: 3}]
+      state.items = state.items.filter((i) => i.id !== action.payload.id);
+    },
+    increaseQuantity: (state, action: PayloadAction<{ id: string }>) => {
+      const item = state.items.find((i) => i.id === action.payload.id);
+
+      if (item) {
+        item.quantity++;
+      }
+    },
+    decreaseQuantity: (state, action: PayloadAction<{ id: string }>) => {
+      const item = state.items.find((i) => i.id === action.payload.id);
+
+      if (item) {
+        if (item.quantity > 1) {
+          item.quantity--;
+        } else {
+          state.items = state.items.filter((i) => i.id !== action.payload.id);
+        }
+      }
     },
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, decreaseQuantity, increaseQuantity } =
+  cartSlice.actions;
 
 export const selectItemsQuantity = (rootState: RootState) =>
   rootState.cart.items.length;
@@ -38,19 +72,8 @@ export const selectItemsQuantity = (rootState: RootState) =>
 export const selectItems = (rootState: RootState) => rootState.cart.items;
 
 export const selectCartTotal = (rootState: RootState) => {
-  // Policz sumę produktów w koszyku
-
-  // Sposób 1
-  //   let total = 0;
-
-  //   rootState.cart.items.forEach((item) => {
-  //     total += item.price;
-  //   });
-
-  //   return total;
-
   return rootState.cart.items
-    .reduce((total, item) => (total += item.price), 0)
+    .reduce((total, item) => (total += item.price * item.quantity), 0)
     .toFixed(2);
 };
 

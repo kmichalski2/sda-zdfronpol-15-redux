@@ -1,14 +1,20 @@
 import styles from './Product.module.css';
 import { useAppDispatch } from '../../app/hooks';
-import { addToCart, ProductModel } from '../cart/cartSlice';
+import { addToCart, CartItemModel } from '../cart/cartSlice';
+import { ProductModel } from './productSlice';
 
-export function Product() {
+export interface ProductProps {
+    product: ProductModel;
+}
+
+export function Product(props: ProductProps) {
     const dispatch = useAppDispatch();
-
-    const product: ProductModel = {
-        id: '1',
-        name: 'T-Shirt',
-        price: 39.99,
+    const { product } = props;
+    const cartItem: CartItemModel = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1
     }
 
     return (
@@ -16,7 +22,7 @@ export function Product() {
             <h5>{product.name}</h5>
             <em>{product.price}</em>
 
-            <button className={styles.btn} onClick={() => dispatch(addToCart(product))}>Add to cart</button>
+            <button className={styles.btn} onClick={() => dispatch(addToCart(cartItem))}>Add to cart</button>
         </div>
     )
 }
