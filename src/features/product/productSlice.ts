@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { stat } from "fs";
 import { RootState } from "../../app/store";
 
 export interface ProductModel {
@@ -11,6 +12,7 @@ export interface ProductModel {
 
 export interface ProductState {
   products: ProductModel[];
+  results: ProductModel[];
 }
 
 const initialState: ProductState = {
@@ -52,13 +54,24 @@ const initialState: ProductState = {
         "https://f01.esfr.pl/foto/4/55862747841/957fc29d6381e9c76f04279080e77523/sony-ghost-of-tsushima-ps4,55862747841_8.jpg",
     },
   ],
+  results: [],
 };
 
 const productSlice = createSlice({
   name: "product",
   initialState,
-  reducers: {},
+  reducers: {
+    searchProducts: (state, action: PayloadAction<{ phrase: string }>) => {
+      const { phrase } = action.payload;
+      state.results = state.products.filter((product) =>
+        product.name.includes(phrase)
+      );
+    },
+  },
 });
+
+export const selectResults = (rootState: RootState) =>
+  rootState.product.results;
 
 export const selectProducts = (rootState: RootState) =>
   rootState.product.products;

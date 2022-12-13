@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { idText } from "typescript";
 import { RootState } from "../../app/store";
 
 export interface CartItemModel {
@@ -11,16 +10,19 @@ export interface CartItemModel {
 
 export interface CartState {
   items: CartItemModel[];
+  displayed: boolean;
 }
 
 const initialState: CartState = {
   items: [],
+  displayed: false,
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    // TODO: 3 Utwórz akcję która wyświetli lub schowa przycisk
     addToCart: (state, action: PayloadAction<CartItemModel>) => {
       const item = state.items.find((i) => i.id === action.payload.id);
 
@@ -60,14 +62,28 @@ export const cartSlice = createSlice({
         }
       }
     },
+    toggleCart: (state) => {
+      state.displayed = !state.displayed;
+    },
   },
 });
 
-export const { addToCart, removeFromCart, decreaseQuantity, increaseQuantity } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  decreaseQuantity,
+  increaseQuantity,
+  toggleCart,
+} = cartSlice.actions;
+
+export const selectCartDisplayed = (rootState: RootState) =>
+  rootState.cart.displayed;
 
 export const selectItemsQuantity = (rootState: RootState) =>
-  rootState.cart.items.length;
+  rootState.cart.items.reduce(
+    (totalQuantity, item) => (totalQuantity += item.quantity),
+    0
+  );
 
 export const selectItems = (rootState: RootState) => rootState.cart.items;
 

@@ -1,13 +1,16 @@
 import './App.css';
 import { Cart } from './features/cart/Cart';
 import { ProductsList } from './features/product/ProductsList';
+import { Header } from './Header';
 
 function App() {
   return (
-    <div className="App">
-        <Cart />
+    <div>
+      <Header />
 
-        <ProductsList />
+      <Cart />
+
+      <ProductsList />
     </div>
   );
 }
