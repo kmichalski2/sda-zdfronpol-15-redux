@@ -27,7 +27,7 @@ export function Cart() {
     // TODO: 6 Wyświetl informacje kiedy koszyk jest pusty
 
     return (
-        <div className={"card position-fixed end-0 top-2 " + (displayed ? "d-block" : "d-none")}>
+        <div className={"card position-fixed end-0 top-2 z-index-1 " + (displayed ? "d-block" : "d-none")}>
             <ul className="list-group">
                 { items.map(item => <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
                     <span className="me-5">{item.name}</span>

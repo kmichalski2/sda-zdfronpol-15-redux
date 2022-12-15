@@ -10,7 +10,9 @@ function App() {
 
       <Cart />
 
-      <ProductsList />
+      <main className="container mt-4">
+        <ProductsList />
+      </main>
     </div>
   );
 }

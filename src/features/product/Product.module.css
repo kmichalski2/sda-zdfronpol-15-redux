@@ -1,15 +1,6 @@
-.product {
-    margin: 16px;
-    width: 25%;
-    border: 1px solid lightslategrey;
-    border-radius: 10px;
-    padding: 8px;
-}
-
-.btn {
-    border-radius: 10px;
-    width: 100%;
-    padding: 8px 16px;
-    background-color: rgb(0, 119, 255);
-    color: white;
+.productsList {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
 }

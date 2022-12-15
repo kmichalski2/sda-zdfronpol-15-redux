@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { stat } from "fs";
 import { RootState } from "../../app/store";
 
 export interface ProductModel {
@@ -64,11 +63,13 @@ const productSlice = createSlice({
     searchProducts: (state, action: PayloadAction<{ phrase: string }>) => {
       const { phrase } = action.payload;
       state.results = state.products.filter((product) =>
-        product.name.includes(phrase)
+        product.name.toLowerCase().includes(phrase.toLowerCase())
       );
     },
   },
 });
+
+export const { searchProducts } = productSlice.actions;
 
 export const selectResults = (rootState: RootState) =>
   rootState.product.results;
