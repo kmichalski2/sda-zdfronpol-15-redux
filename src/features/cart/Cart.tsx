@@ -1,4 +1,5 @@
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { addNotification } from '../notifications/notificationsSlice';
 import { selectItems, selectCartTotal, removeFromCart, CartItemModel, decreaseQuantity, increaseQuantity, selectCartDisplayed } from './cartSlice';
 
 export function Cart() {
@@ -6,6 +7,11 @@ export function Cart() {
     const total = useAppSelector(selectCartTotal);
     const displayed = useAppSelector(selectCartDisplayed);
     const dispatch = useAppDispatch();
+
+    const handleRemoveClick = (item: CartItemModel) => {
+        dispatch(removeFromCart({ id: item.id}));
+        dispatch(addNotification({ type: 'warning', message: `Produkt ${item.name} został usunięty z koszyka.`}));
+    }
 
     const renderButtons = (item: CartItemModel) => {
         return (
@@ -17,7 +23,7 @@ export function Cart() {
                 <button className="btn btn-light" onClick={() => dispatch(increaseQuantity({ id: item.id }))}>
                     <i className="bi bi-plus"></i>
                 </button>
-                <button className="btn btn-danger" onClick={() => dispatch(removeFromCart({ id: item.id}))}>
+                <button className="btn btn-danger" onClick={() => handleRemoveClick(item)}>
                     <i className="bi bi-trash-fill"></i>
                 </button>
             </>

@@ -1,5 +1,6 @@
 import './App.css';
 import { Cart } from './features/cart/Cart';
+import { AlertsList } from './features/notifications/AlertsList';
 import { ProductsList } from './features/product/ProductsList';
 import { Header } from './Header';
 
@@ -13,6 +14,8 @@ function App() {
       <main className="container mt-4">
         <ProductsList />
       </main>
+
+      <AlertsList />
     </div>
   );
 }

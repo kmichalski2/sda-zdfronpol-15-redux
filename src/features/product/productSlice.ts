@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { stat } from "fs";
 import { RootState } from "../../app/store";
 
 export interface ProductModel {
@@ -66,10 +67,17 @@ const productSlice = createSlice({
         product.name.toLowerCase().includes(phrase.toLowerCase())
       );
     },
+    sortByPriceDesc: (state) => {
+      state.results = state.results.sort((a, b) => b.price - a.price);
+    },
+    sortByPriceAsc: (state) => {
+      state.results = state.results.sort((a, b) => a.price - b.price);
+    },
   },
 });
 
-export const { searchProducts } = productSlice.actions;
+export const { searchProducts, sortByPriceAsc, sortByPriceDesc } =
+  productSlice.actions;
 
 export const selectResults = (rootState: RootState) =>
   rootState.product.results;

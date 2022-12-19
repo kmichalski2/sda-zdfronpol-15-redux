@@ -1,9 +1,13 @@
+import { useAppDispatch } from './app/hooks';
+import { removeNotification } from './features/notifications/notificationsSlice';
 export interface AlertProps {
+    id: number;
     type: 'success' | 'info' | 'warning' | 'error';
     message: string;
 }
 
 export function Alert(props: AlertProps) {
+    const dispatch = useAppDispatch();
     // Sposób 1
     // const getAlertClass = (type: string): string {
     //     switch(props.type) {
@@ -25,7 +29,7 @@ export function Alert(props: AlertProps) {
 
     // Sposób 2
     const typeClassMap = new Map([
-        ['success', 'alert-sucess'],
+        ['success', 'alert-success'],
         ['info', 'alert-primary'],
         ['warning', 'alert-warning'],
         ['error', 'alert-danger']
@@ -35,6 +39,10 @@ export function Alert(props: AlertProps) {
 
 
     return (
-        <div className={"alert " + typeClass}>{props.message}</div>
+        <div className={"alert alert-dismissible fade show " + typeClass}>
+            {props.message}
+            { props.id > 0 ? <button type="button" className="btn-close" aria-label="Close" 
+                onClick={() => dispatch(removeNotification({ id: props.id }))}></button> : '' }
+        </div>
     )
 }
